@@ -1,4 +1,18 @@
 
+let results = document.querySelector("#results");
+let buttons = document.querySelectorAll("button");
+let displayOutcome = document.createElement("div");
+let scoreCount = document.createElement("div");
+let computerScore = 0;
+let userScore = 0;
+
+
+buttons.forEach(button => {
+    button.addEventListener("click", function(){playRound(button.id, getComputerChoice())});
+});
+
+
+
 
 function getComputerChoice() {
     let choice = Math.floor(Math.random() * 3);
@@ -21,6 +35,7 @@ function getComputerChoice() {
     return strChoice;
 }
 
+
 function playRound(playerSelection, computerSelection) {
     const paperVRock = "Paper beats Rock";
     const rockVScissors = "Rock beats Scissors";
@@ -33,10 +48,6 @@ function playRound(playerSelection, computerSelection) {
     const win = "You Win! ";
 
     let outcome = "";
-
-    playerSelectionLower = playerSelection.slice(1).toLowerCase();
-    playerSelectionLetterUpper = playerSelection.slice(0, 1).toUpperCase();
-    playerSelection = playerSelectionLetterUpper + playerSelectionLower;
 
     switch (playerSelection) {
         case "Rock":
@@ -84,29 +95,58 @@ function playRound(playerSelection, computerSelection) {
         
 
     }
-    return outcome;
+
+    displayOutcome.textContent = outcome;
+    results.appendChild(displayOutcome);
+
+    if (outcome.slice(0, 9) === "You Lose!") {
+        ++computerScore;
+        scoreCount.textContent = `Computer won that round! Your score: ${userScore} Computer score: ${computerScore}`;
+    }
+    else if (outcome.slice(0, 8) === "You Win!") {            ++userScore;
+        scoreCount.textContent = `You won that round! Your score: ${userScore} Computer score: ${computerScore}`;
+    }
+    else {
+        scoreCount.textContent = `Nobody won that round! Your score: ${userScore} Computer score: ${computerScore}`;
+    }
+    results.appendChild(scoreCount);
+
+    if(computerScore >= 5 || userScore >= 5) {
+        results.removeChild(scoreCount);
+        displayOutcome.textContent = `Game over! PC:${computerScore} to YOU:${userScore}`;
+        computerScore = 0;
+        userScore = 0;
+    }
+
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
 
 function game() {
     let computerScore = 0;
     let userScore = 0;
 
 
-    for (let i = 0; i < 5; ++i) {
-        let userChoice = prompt("Your choice?");
-        let outcomeString = playRound(userChoice, getComputerChoice());
-
-        if (outcomeString.slice(0, 9) === "You Lose!") {
-            ++computerScore;
-            console.log(`Computer won that round! Your score: ${userScore} Computer score: ${computerScore}`);
-        }
-        else if (outcomeString.slice(0, 8) === "You Win!") {
-            ++userScore;
-            console.log(`You won that round! Your score: ${userScore} Computer score: ${computerScore}`);
-        }
-        else {
-            console.log(`Nobody won that round! Your score: ${userScore} Computer score: ${computerScore}`);
-        }
+     if (outcomeString.slice(0, 9) === "You Lose!") {
+        ++computerScore;
+        console.log(`Computer won that round! Your score: ${userScore} Computer score: ${computerScore}`);
+    }
+    else if (outcomeString.slice(0, 8) === "You Win!") {            ++userScore;
+        console.log(`You won that round! Your score: ${userScore} Computer score: ${computerScore}`);
+    }
+    else {
+        console.log(`Nobody won that round! Your score: ${userScore} Computer score: ${computerScore}`);
     }
 
     if (computerScore > userScore) {
@@ -120,4 +160,5 @@ function game() {
     }
 }
 
-game();
+
+
